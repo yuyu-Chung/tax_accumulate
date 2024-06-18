@@ -45,10 +45,11 @@ def tax_rate():
     #檢查修正值
     print(percent.value)
     
-    wb_2.save("羽的投資收益表.xlsx")
-
     wb_1.close()
     app.quit()
-
-
+    
+    wb_2.save("羽的投資收益表.xlsx")
+    wb_2.save("D:\理財\跑程式輔助測試文件\羽的投資收益表_1.xlsx")
+    
 tax_rate()
+
