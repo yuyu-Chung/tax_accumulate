@@ -1,0 +1,57 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jun 18 23:11:23 2024
+
+@author: user
+"""
+
+# 練習操作excel套件 xlwings 和 openpyxl，應用他們在自己的理財excel檔整理，設計特定欄位計算綜所稅累進差額，輔助綜所稅應繳稅額工作表整理。
+# 程式邏輯：原excel檔["W2"]是稅率欄位，視["W2"]的值，在["X2"]欄位填入對應累進差額，用if...else基本語法。再應用openpyxl修改儲存格套件，存入工作表內。
+# 驗證方式：程式跑完以後回頭檢驗excel檔是否有跑出應有之對應值，有即程式驗證通過，無則檢視程式撰寫有無差錯，經檢視需注意儲存格需用.value選項及.save，否則不會儲存修改值。
+
+from openpyxl import load_workbook
+import xlwings as xw 
+
+def accumulate_value():
+    app = xw.App(visible=(False), add_book=(False))
+    wb_1 = app.books.open(r"D:\理財\跑程式輔助測試文件\羽的投資收益表_1.xlsx")
+    ws_1 = wb_1.sheets["稅務試算"]
+    tax = ws_1["W2"]
+    tax_rate = tax.value
+    #檢查數值
+    print(tax_rate)
+
+    wb_2 = load_workbook("羽的投資收益表.xlsx")
+    ws_2 = wb_2["稅務試算"]
+
+    accumulate = ws_2["X2"]
+
+    #注意! accumulate、accumulate.value are different
+    print(accumulate.value)
+    print(accumulate)
+
+    if tax_rate == 0:
+        accumulate.value = 0
+    elif tax_rate == 0.05:
+        accumulate.value = 0
+    elif tax_rate == 0.12:
+        accumulate.value = 39200
+    elif tax_rate == 0.2:
+        accumulate.value = 140000
+    elif tax_rate == 0.3:
+        accumulate.value = 392000
+    elif tax_rate == 0.4:
+        accumulate.value = 864000
+    else:
+        accumulate.value = 0
+    
+    #檢查修正值
+    print(accumulate.value)
+    
+    wb_2.save("羽的投資收益表.xlsx")
+
+    wb_1.close()
+    app.quit()
+
+
+accumulate_value()
