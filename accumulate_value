@@ -48,10 +48,10 @@ def accumulate_value():
     #檢查修正值
     print(accumulate.value)
     
-    wb_2.save("羽的投資收益表.xlsx")
-
     wb_1.close()
     app.quit()
-
+    
+    wb_2.save("羽的投資收益表.xlsx")
+    wb_2.save("D:\理財\跑程式輔助測試文件\羽的投資收益表_1.xlsx")
 
 accumulate_value()
