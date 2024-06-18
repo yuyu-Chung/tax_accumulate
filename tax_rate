@@ -1,0 +1,54 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Jun 16 20:47:11 2024
+
+@author: user
+"""
+# 練習操作excel套件 xlwings 和 openpyxl，應用他們在自己的理財excel檔整理，設計特定欄位計算綜所稅稅率，輔助綜所稅應繳稅額工作表整理。
+# 程式邏輯：原excel檔["V2"]是收入欄位，視["V2"]的值，在["W2"]欄位填入對應稅率，用if...else基本語法。再應用openpyxl修改儲存格套件，存入工作表內。
+# 驗證方式：程式跑完以後回頭檢驗excel檔是否有跑出應有之對應值，有即程式驗證通過，無則檢視程式撰寫有無差錯，經檢視需注意儲存格需用.value選項及.save，否則不會儲存修改值。
+
+from openpyxl import load_workbook
+import xlwings as xw 
+
+def tax_rate():
+    app = xw.App(visible=(False), add_book=(False))
+    wb_1 = app.books.open(r"D:\理財\跑程式輔助測試文件\羽的投資收益表_1.xlsx")
+    ws_1 = wb_1.sheets["稅務試算"]
+    target = ws_1["V2"]
+    target_cash = target.value
+    #檢查數值
+    print(target_cash)
+
+    wb_2 = load_workbook("羽的投資收益表.xlsx")
+    ws_2 = wb_2["稅務試算"]
+
+    percent = ws_2["W2"]
+
+    #注意! percent、percent.value are different
+    print(percent.value)
+    print(percent)
+
+    if target_cash < 0:
+        percent.value = 0
+    elif 0 <= target_cash <= 560000:
+        percent.value = 0.05
+    elif 560001 <= target_cash <= 1260000:
+        percent.value = 0.12
+    elif 1260001 <= target_cash <= 2520000:
+        percent.value = 0.2
+    elif 2520001 <= target_cash <= 4720000:
+        percent.value = 0.3
+    else:
+        percent = 0.4
+    
+    #檢查修正值
+    print(percent.value)
+    
+    wb_2.save("羽的投資收益表.xlsx")
+
+    wb_1.close()
+    app.quit()
+
+
+tax_rate()
